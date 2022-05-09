@@ -20,6 +20,10 @@ class Car {
 
         this.render();
     }
+
+    set_max_speed(speed) { this.max_speed = speed; }
+    
+    set_max_steer(steer) { this.max_steer = steer; }
     
     reset_speed(){
         this.speed = 0.0;
