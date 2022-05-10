@@ -62,7 +62,7 @@ class Car {
     }
 
     calc_distance_to_point(point) {
-        return Math.hypot(this.rear_x - point.x, this.rear_y - point.y);
+        return Math.hypot(this.x - point.x, this.y - point.y);
     }
     
     render() {
