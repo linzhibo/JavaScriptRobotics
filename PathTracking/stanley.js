@@ -11,56 +11,7 @@ class StanleyController{
         this.last_target_index = -1;
     }
 
-    // calc_target_index(car, path){
-    //     let fx = car.x + car.wheel_base * Math.cos(car.yaw);
-    //     let fy = car.y + car.wheel_base * Math.sin(car.yaw);
-    //     let d=[], dx=[], dy =[];
-    //     for (let i in path.x){
-    //         dx.push(fx - path.x[i]);
-    //         dy.push(fy - path.y[i]);
-    //         d.push(Math.hypot(fx - path.x[i], fy - path.y[i]));
-    //     }
-    //     let target_index = d.indexOf(Math.min(...d));
-    //     let front_axle_vec = [-Math.cos(car.yaw + Math.PI/2), -Math.sin(car.yaw + Math.PI/2)];
-    //     let error_front_axle = dx[target_index] * front_axle_vec[0] + dy[target_index] * front_axle_vec[1];
-    //     return [target_index, error_front_axle];
-    // }
-
-    calc_target_index(car, path) {
-        let ind = 0;
-        if (this.old_nearest_point_index == -1) {
-            let d = [];
-            for (let i in path.x) {
-                d.push(car.calc_distance_to_point(new Vector2D(path.x[i], path.y[i])));
-            }
-            ind = d.indexOf(Math.min(...d));
-            this.old_nearest_point_index = ind;
-        }    
-        else {
-            ind = this.old_nearest_point_index;
-            let dist_to_this_index = car.calc_distance_to_point(new Vector2D(path.x[ind], path.y[ind]));
-            while (ind < path.x.length) {
-                let dist_to_next_index = car.calc_distance_to_point(new Vector2D(path.x[ind + 1], path.y[ind + 1]));
-                if (dist_to_this_index < dist_to_next_index) {
-                    break;
-                }
-                // ind = (((ind + 1) < path.x.length) ? ind + 1 : ind);
-                ind++;
-                dist_to_this_index = dist_to_next_index;
-            }
-            this.old_nearest_point_index = ind;
-        }
-        let Lf = this.k * car.speed + 20;
-        if (ind == -1) {
-            return [0, Lf];
-        }
-        while (Lf > car.calc_distance_to_point(new Vector2D(path.x[ind], path.y[ind]))) {
-            // console.log("while 2");
-            if ((ind + 1) >= path.x.length) {
-                break;
-            }
-            ind += 1;
-        }
+    calc_target_index(car, path){
         let fx = car.x + car.wheel_base * Math.cos(car.yaw);
         let fy = car.y + car.wheel_base * Math.sin(car.yaw);
         let d=[], dx=[], dy =[];
@@ -69,9 +20,10 @@ class StanleyController{
             dy.push(fy - path.y[i]);
             d.push(Math.hypot(fx - path.x[i], fy - path.y[i]));
         }
+        let target_index = d.indexOf(Math.min(...d));
         let front_axle_vec = [-Math.cos(car.yaw + Math.PI/2), -Math.sin(car.yaw + Math.PI/2)];
-        let error_front_axle = dx[ind] * front_axle_vec[0] + dy[ind] * front_axle_vec[1];
-        return [ind, error_front_axle];
+        let error_front_axle = dx[target_index] * front_axle_vec[0] + dy[target_index] * front_axle_vec[1];
+        return [target_index, error_front_axle];
     }
 
     proportional_control(target, current) {
