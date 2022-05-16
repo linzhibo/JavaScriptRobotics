@@ -3,17 +3,17 @@ class StanleyController{
     constructor(){
         this.k = 0.5;  // control gain
         this.Kp = 1.0;  // speed proportional gain
-        this.current_idx = -1;
+        this.current_idx = 0;
         this.old_nearest_point_index = -1;
     }
 
     reset() {
-        this.current_idx = -1;
+        this.current_idx = 0;
     }
 
-    calc_target_index(car, path){
-        let fx = car.x + car.wheel_base * Math.cos(car.yaw);
-        let fy = car.y + car.wheel_base * Math.sin(car.yaw);
+    calc_target_index(car, path) {
+        let fx = car.x + path.directions[this.current_idx]* car.wheel_base * Math.cos(car.yaw);
+        let fy = car.y + path.directions[this.current_idx]* car.wheel_base * Math.sin(car.yaw);
         let d=[], dx=[], dy =[];
         for (let i in path.x){
             dx.push(fx - path.x[i]);
