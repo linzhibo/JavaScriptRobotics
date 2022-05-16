@@ -7,3 +7,5 @@ Personal hobby project, to transform [PythonRobotics](https://github.com/Atsushi
 [Online demo](https://linzhibo.github.io/functions/pp_pt.html)
 
 ![](z-readme_pics/rs_pp.gif "RS_PP")
+
+## ReedShepp path planner with Stanley controller
